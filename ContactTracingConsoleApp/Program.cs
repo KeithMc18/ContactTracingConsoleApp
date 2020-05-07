@@ -42,7 +42,7 @@ namespace ContactTracingConsoleApp
             HttpResponseMessage response = await API.PostAsJsonAsync("/api/Contacts/AddContact", c1);
             if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine("Contact Added");
+                Console.WriteLine("Contact Added " + "Name: "+ c1.FirstName +" "+ c1.LastName + "\nEmail: " +c1.Email);
             }
             else
             {
