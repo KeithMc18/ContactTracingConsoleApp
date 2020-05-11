@@ -23,7 +23,6 @@ namespace ContactTracingConsoleApp
             AddAContact().Wait();
             GetContactsById(2).Wait();
             GetAllPeople().Wait();
-            Console.ReadLine();
         }
         private static async Task AddAContact()
         {
