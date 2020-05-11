@@ -22,17 +22,17 @@ namespace ContactTracingConsoleApp
             GetAllContacts().Wait();
             AddAContact().Wait();
             GetContactsById(2).Wait();
-            Console.ReadLine();
+            GetAllPeople().Wait();
         }
         private static async Task AddAContact()
         {
             Contact c1 = new Contact()
             {
                 Id = 2,
-                FirstName = "John",
-                LastName = "Smart",
-                Mobile = "555-333",
-                Email = "stuff@nonsense",
+                FirstName = "Dermot",
+                LastName = "Boyle",
+                Mobile = "555000-333",
+                Email = "nonsense@email.com(opens in new tab)",
                 ContactId = 12312,
                 DateMet = DateTime.Now,
                 DistanceKept = 10,
@@ -42,19 +42,17 @@ namespace ContactTracingConsoleApp
             HttpResponseMessage response = await API.PostAsJsonAsync("/api/Contacts/AddContact", c1);
             if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine("Contact Added " + "Name: "+ c1.FirstName +" "+ c1.LastName + "\nEmail: " +c1.Email);
+                Console.WriteLine("Contact Added " + "Name: " + c1.FirstName + " " + c1.LastName + "\nEmail: " + c1.Email);
             }
             else
             {
                 Console.WriteLine("AddAContact - " + response.StatusCode + " " + response.ReasonPhrase);
             }
         }
-
-
         private static async Task GetContactsById(int id)
         {
             string addedId = "?id=" + id;
-            HttpResponseMessage response = await API.GetAsync("/api/Contacts/GetContactsById"+ addedId);
+            HttpResponseMessage response = await API.GetAsync("/api/Contacts/GetContactsById" + addedId);
             if (response.IsSuccessStatusCode)
             {
                 // read results
@@ -93,6 +91,24 @@ namespace ContactTracingConsoleApp
             else
             {
                 Console.WriteLine("GetAllContacts - " + response.StatusCode + " " + response.ReasonPhrase);
+            }
+        }
+        private static async Task GetAllPeople()
+        {
+            HttpResponseMessage response = await API.GetAsync("/api/Contacts/GetAllPeople");
+            if (response.IsSuccessStatusCode)
+            {
+                // read results
+                Console.WriteLine("---------------------------Get All People --------------------------");
+                var persons = await response.Content.ReadAsAsync<IEnumerable<Person>>();
+                foreach (var c in persons)
+                {
+                    Console.WriteLine("----------------\nFirst Name: " + c.FName + "\nLast Name: " + c.LName + "\nId Number: " + c.id + "\nEmail: " + c.Email + "----------------");
+                }
+            }
+            else
+            {
+                Console.WriteLine("GetAllPeople - " + response.StatusCode + " " + response.ReasonPhrase);
             }
         }
     }
